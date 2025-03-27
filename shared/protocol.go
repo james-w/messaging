@@ -1,10 +1,20 @@
-// This can define structured message types, JSON encoding/decoding, etc.
-// Currently unused but important for future extensibility.
 package shared
 
+import (
+	"encoding/json"
+)
+
 type Message struct {
-	Sender    string `json:"sender"`
-	Timestamp string `json:"timestamp"`
-	Text      string `json:"text"`
+	Username string `json:"username"`
+	Text     string `json:"text"`
 }
 
+func Encode(msg Message) ([]byte, error) {
+	return json.Marshal(msg)
+}
+
+func Decode(data []byte) (Message, error) {
+	var m Message
+	err := json.Unmarshal(data, &m)
+	return m, err
+}
