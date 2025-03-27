@@ -8,6 +8,11 @@ import (
 )
 
 func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("Enter your username: ")
+	username, _ := reader.ReadString('\n')
+	username = username[:len(username)-1] // strip newline
+
 	conn, err := net.Dial("tcp", "localhost:9000")
 	if err != nil {
 		fmt.Println("Unable to connect to server:", err)
@@ -26,11 +31,12 @@ func main() {
 		}
 	}()
 
-	stdinReader := bufio.NewReader(os.Stdin)
+	// reused `reader` above
 	for {
 		fmt.Print("You: ")
-		text, _ := stdinReader.ReadString('\n')
-		fmt.Fprint(conn, text)
+		text, _ := reader.ReadString('\n')
+		formatted := fmt.Sprintf("[%s]: %s", username, text)
+		fmt.Fprint(conn, formatted)
 	}
 }
 
