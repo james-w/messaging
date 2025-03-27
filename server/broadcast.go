@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"strings"
 	"sync"
 )
 
@@ -46,6 +47,7 @@ func handleClient(conn net.Conn, hub *Hub) {
 	reader := bufio.NewReader(conn)
 	for {
 		msg, err := reader.ReadString('\n')
+		msg = strings.TrimSpace(msg)
 		if err == io.EOF {
 			break
 		}
